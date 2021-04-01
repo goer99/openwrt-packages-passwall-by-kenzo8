@@ -1,5 +1,7 @@
 ﻿#### 说明
 
+* 基于bypass在编译过程中的兼容性、出错率，所以取消bypass
+
 * 软件不定期同步大神库更新，适合一键下载到package目录下，用于openwrt编译
 
 
@@ -34,8 +36,11 @@
  ```
  
 - openwrt 固件编译自定义主题与软件
+- luci-app-vssr            ------------------vssr老竭力
+- luci-app-dnsfilter       ------------------基于DNS的广告过滤
 - luci-app-openclash       ------------------openclash图形         
 - luci-app-advancedsetting ------------------系统高级设置
+- luci-app-serverchan      ------------------Server酱 微信/Telegram 推送的插件
 - luci-theme-ifit          ------------------透明主题（适配18.06修复主机名错误）
 - luci-theme-atmaterial    ------------------atmaterial 三合一主题（适配18.06）     
 - luci-app-aliddns         ------------------阿里云ddns

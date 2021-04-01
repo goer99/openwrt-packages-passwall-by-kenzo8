@@ -54,11 +54,6 @@ s = m:section(NamedSection, arg[1], "user", "")
 s.addremove = false
 s.dynamic = false
 
-share = s:option(DummyValue, "passwall_server", translate("Share Current"))
-share.rawhtml  = true
-share.template = "passwall/node_list/link_share_man"
-share.value = arg[1]
-
 enable = s:option(Flag, "enable", translate("Enable"))
 enable.default = "1"
 enable.rmempty = false
@@ -245,13 +240,6 @@ uuid:depends("type", "Trojan-Plus")
 
 alter_id = s:option(Value, "alter_id", translate("Alter ID"))
 alter_id:depends({ type = "Xray", protocol = "vmess" })
-
-level = s:option(Value, "level", translate("User Level"))
-level:depends({ type = "Xray", protocol = "vmess" })
-level:depends({ type = "Xray", protocol = "vless" })
-level:depends({ type = "Xray", protocol = "shadowsocks" })
-level:depends({ type = "Xray", protocol = "trojan" })
-level:depends({ type = "Xray", protocol = "mtproto" })
 
 tls = s:option(Flag, "tls", translate("TLS"))
 tls.default = 0
@@ -558,18 +546,38 @@ for k, e in ipairs(api.get_valid_nodes()) do
     if e.node_type == "normal" and e.type == "Xray" then
         nodes_table[#nodes_table + 1] = {
             id = e[".name"],
-            remarks = e.remarks_name
+            remarks = e["remark"]
         }
     end
 end
 
 transit_node = s:option(ListValue, "transit_node", translate("transit node"))
 transit_node:value("nil", translate("Close"))
+transit_node:value("_socks", translate("Custom Socks"))
+transit_node:value("_http", translate("Custom HTTP"))
 for k, v in pairs(nodes_table) do transit_node:value(v.id, v.remarks) end
 transit_node.default = "nil"
 transit_node:depends("type", "Xray")
 
-log = s:option(Flag, "log", translate("Enable") .. translate("Log"))
+transit_node_address = s:option(Value, "transit_node_address", translate("Address (Support Domain Name)"))
+transit_node_address:depends("transit_node", "_socks")
+transit_node_address:depends("transit_node", "_http")
+
+transit_node_port = s:option(Value, "transit_node_port", translate("Port"))
+transit_node_port.datatype = "port"
+transit_node_port:depends("transit_node", "_socks")
+transit_node_port:depends("transit_node", "_http")
+
+transit_node_username = s:option(Value, "transit_node_username", translate("Username"))
+transit_node_username:depends("transit_node", "_socks")
+transit_node_username:depends("transit_node", "_http")
+
+transit_node_password = s:option(Value, "transit_node_password", translate("Password"))
+transit_node_password.password = true
+transit_node_password:depends("transit_node", "_socks")
+transit_node_password:depends("transit_node", "_http")
+
+log = s:option(Flag, "log", translate("Log"))
 log.default = "1"
 log.rmempty = false
 
